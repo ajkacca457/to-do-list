@@ -1,11 +1,190 @@
-import Projectgenerator from './Projectgenerator';
-import Taskgenerator from './Taskgenerator';
+const taskgen = (name, date, priority, description) => ({
+  name,
+  date,
+  priority,
+  description,
+});
 
-const Logic = (projects, selectedlistitem, savelocal, stored) => {
+const progen = (name) => ({
+  id: Math.round(Math.random() * 20000000).toString(),
+  name,
+  todo: [],
+});
+
+
+  const navgenerator = () => {
+    const navbar = document.createElement('div');
+    navbar.classList.add('navbar');
+    navbar.innerHTML = `
+  <div class="itemcont">
+  <img src="list.png" id="list">
+  <h3 id="todo">Todo-List</h3>
+  </div>`;
+
+    return navbar;
+  };
+
+  const projectlist = () => {
+    const projectul = document.createElement('ul');
+    projectul.classList.add('projectlist');
+    return projectul;
+  };
+
+  const projectform = () => {
+    const form = document.createElement('form');
+    form.classList.add('projectform');
+    form.innerHTML = `
+    <input type="text" placeholder="Enter project name" id="input">
+    <button type="submit" id="submitbtn">+ Add Project</button>
+    `;
+    return form;
+  };
+
+  const projectcont = () => {
+    const projectbar = document.createElement('div');
+    projectbar.classList.add('projectbar');
+    const projecthead = document.createElement('h3');
+    projecthead.classList.add('p-title');
+    projecthead.textContent = 'All Projects';
+    projectbar.appendChild(projecthead);
+    projectbar.appendChild(projectlist());
+    projectbar.appendChild(projectform());
+    return projectbar;
+  };
+
+  const taskheading = () => {
+    const heading = document.createElement('div');
+    heading.classList.add('theading');
+    heading.innerHTML = `
+    <h3 class="projecthead">Project Name</h3>
+    <button id="addbtn">+ Add Task</button>
+    `;
+    return heading;
+  };
+
+  const tasklist = () => {
+    const taskul = document.createElement('ul');
+    taskul.classList.add('tasklist');
+    return taskul;
+  };
+
+  const taskform = () => {
+    const tform = document.createElement('form');
+    tform.classList.add('taskform', 'hide');
+    tform.innerHTML = `
+  <h3 class="taskh">Add New Task</h3>
+
+  <label for="name"> Task Name:</label>
+  <input type="text" placeholder="Enter name of the task" id="name">
+
+  <label for="date"> Task Date:</label>
+  <input type="date" id="date">
+
+  <label for="priority"> Task Priority:</label>
+  <select name="priority" id="priority">
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select>
+
+  <label for="description">Description:</label>
+  <input id="description" name="description"></input>
+
+  <div class="fbtncont">
+  <button type="submit" id="tasksubmit">Submit</button>
+  <button type="submit" id="taskcancel">Cancel</button>
+  </div>
+  `;
+    return tform;
+  };
+
+
+  const taskupdateform = () => {
+    const updateform = document.createElement('form');
+    updateform.classList.add('taskform', 'taskupdate');
+    updateform.innerHTML = `
+  <h3 class="taskh">Update Task</h3>
+
+  <label for="uname"> Task Name:</label>
+  <input type="text" placeholder="Enter name of the task" id="uname">
+
+  <label for="udate"> Task Date:</label>
+  <input type="date" id="udate">
+
+  <label for="upriority"> Task Priority:</label>
+  <select name="priority" id="upriority">
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select>
+
+  <input type="hidden" id="index">
+
+  <label for="udescription">Description:</label>
+  <input id="udescription" name="description"></input>
+
+  <div class="fbtncont">
+  <button type="submit" id="taskupdate">Submit</button>
+  <button id="taskupdatecancel">Cancel</button>
+  </div>
+  `;
+    return updateform;
+  };
+
+
+  const taskinfo = () => {
+    const taskinformation = document.createElement('div');
+    taskinformation.classList.add('taskinfo', 'hide');
+    return taskinformation;
+  };
+
+
+  const taskcont = () => {
+    const taskbar = document.createElement('div');
+    taskbar.classList.add('taskbar');
+    taskbar.appendChild(taskheading());
+    taskbar.appendChild(taskform());
+    taskbar.appendChild(taskupdateform());
+    taskbar.appendChild(tasklist());
+    return taskbar;
+  };
+
+  const bodycont = () => {
+    const body = document.createElement('div');
+    body.classList.add('mbody');
+    body.appendChild(projectcont());
+    body.appendChild(taskcont());
+    return body;
+  };
+
+  const stored = [{
+      id: '1',
+      name: 'default',
+      todo: [{
+        name: 'Visit doctor office', date: '21-12-14', priority: 'high', description: 'Have to get a health checkout',
+      }],
+    }];
+    const projects = JSON.parse(localStorage.getItem('allprojects')) || stored;
+    let selectedlistitem = localStorage.getItem('selecteditem');
+    if (selectedlistitem === null) {
+      selectedlistitem = stored[0].id;
+    }
+
+    const savelocal = () => {
+      localStorage.setItem('allprojects', JSON.stringify(projects));
+      localStorage.setItem('selecteditem', selectedlistitem);
+    };
+
+
+  const container = document.querySelector('.container');
+  container.appendChild(navgenerator());
+  container.appendChild(taskinfo());
+  container.appendChild(bodycont());
+
   const addproject = () => {
     const pname = document.querySelector('#input');
     const proname = pname.value;
-    const newproject = Projectgenerator(proname);
+    const newproject = progen(proname);
     if (proname === '') {
       alert('please enter valid name');
     } else {
@@ -41,7 +220,7 @@ const Logic = (projects, selectedlistitem, savelocal, stored) => {
     const tdate = date.value;
     const tpriority = priority.value;
     const tdescription = description.value;
-    const newtask = Taskgenerator(tname, tdate, tpriority, tdescription);
+    const newtask = taskgen(tname, tdate, tpriority, tdescription);
     const selectedproject = projects.find((item) => item.id === selectedlistitem);
 
     if (tname === '' || tdate === '' || tpriority === '' || tdescription === '') {
@@ -202,16 +381,16 @@ const Logic = (projects, selectedlistitem, savelocal, stored) => {
     displayproject();
   };
 
-  const projectcont = document.querySelector('.projectlist');
-  projectcont.addEventListener('click', (e) => {
+  const projectcont2 = document.querySelector('.projectlist');
+  projectcont2.addEventListener('click', (e) => {
     if (e.target.classList.contains('d-icon')) {
       const { index } = e.target.dataset;
       removeproject(index);
     }
   });
 
-  const taskcont = document.querySelector('.tasklist');
-  taskcont.addEventListener('click', (e) => {
+  const taskcont2 = document.querySelector('.tasklist');
+  taskcont2.addEventListener('click', (e) => {
     if (e.target.classList.contains('i-display')) {
       const { index } = e.target.dataset;
       dtaskinfo(index);
@@ -248,7 +427,3 @@ const Logic = (projects, selectedlistitem, savelocal, stored) => {
     savelocal();
     displaytask();
   });
-};
-
-
-export default Logic;

@@ -205,7 +205,7 @@ const progen = (name) => ({
         projecthead.textContent = item.name;
       }
       liitem.classList.add('li-item');
-      liitem.innerHTML = `${item.name} <button class="${index === 0 ? 'hide' : 'normal'} d-icon d-btn" data-index="${index}">X</button>`;
+      liitem.innerHTML = `${item.name} <button class="${index === 0 ? 'hide' : 'normal'} d-icon d-btn" data-index="${index}"><i class="fas fa-trash"></i></button>`;
       projectcont.appendChild(liitem);
     });
   };
@@ -306,9 +306,9 @@ const progen = (name) => ({
       titem.innerHTML = `
     <h4>${item.name}.</h4>
     <div class="btncont">
-    <button class="i-display btn-f" data-index="${index}">Show</button>
-    <button class="i-update btn-f" data-index="${index}">Edit</button>
-    <button class="i-remove btn-f" data-index="${index}">Remove</button>
+    <button class="i-display btn-f" data-index="${index}"><i class="fas fa-file"></i></button>
+    <button class="i-update btn-f" data-index="${index}"><i class="far fa-edit"></i></button>
+    <button class="i-remove btn-f" data-index="${index}"><i class="fas fa-trash"></i></button>
     </div>`;
       tasklist.appendChild(titem);
     });
